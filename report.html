@@ -11803,7 +11803,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># 载入此项目所需要的库</span>
@@ -11827,7 +11827,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># 载入波士顿房屋的数据集</span>
@@ -12090,7 +12090,7 @@ Standard deviation of prices: $165,171.13
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO 2</span>
@@ -12120,8 +12120,8 @@ Standard deviation of prices: $165,171.13
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="&#38382;&#39064;-2---&#22238;&#31572;:">&#38382;&#39064; 2 - &#22238;&#31572;:<a class="anchor-link" href="#&#38382;&#39064;-2---&#22238;&#31572;:">&#194;&#182;</a></h3><p>将数据集分为训练集和测试集可以在数据集本身对学习出来的模型进行验证，防止过拟合。
-如果用训练集做测试会出现过拟合，这样在输入新的数据时泛化能力不强。</p>
+<h3 id="&#38382;&#39064;-2---&#22238;&#31572;:">&#38382;&#39064; 2 - &#22238;&#31572;:<a class="anchor-link" href="#&#38382;&#39064;-2---&#22238;&#31572;:">&#194;&#182;</a></h3><p>将数据集分为训练集和测试集目的在于在训练集上训练模型，在测试集上评价模型的表现。
+如果用训练集做测试无法对训练出来的模型进行客观的评价。</p>
 
 </div>
 </div>
@@ -13997,7 +13997,7 @@ xgSV/wdFWS5JyBFTewAAAABJRU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[70]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO 4 可选</span>
@@ -14013,19 +14013,45 @@ xgSV/wdFWS5JyBFTewAAAABJRU5ErkJggg==
 <span class="sd">    return scores</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeRegressor</span>
+<span class="k">def</span> <span class="nf">performance_metric</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_predict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;计算并返回预测值相比于预测值的分数&quot;&quot;&quot;</span>
+    <span class="n">y_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>
+    <span class="n">y_predict</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_predict</span><span class="p">)</span>
+    <span class="n">mean_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>
+    <span class="n">ss_tot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">y_true</span><span class="o">-</span><span class="n">mean_value</span><span class="p">))</span>
+    <span class="n">ss_res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">y_true</span><span class="o">-</span><span class="n">y_predict</span><span class="p">))</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">ss_res</span><span class="o">/</span><span class="n">ss_tot</span>
+
+    <span class="k">return</span> <span class="n">score</span>
+
 <span class="k">def</span> <span class="nf">cross_val_score</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scoring</span> <span class="o">=</span> <span class="n">performance_metric</span><span class="p">,</span><span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-    <span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cv</span><span class="p">)]</span>
-    <span class="c1"># 讲数据分为3份，分别取其中一份作为验证集，另外两份作为训练集做训练和预测</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">cv</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">cv</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cv</span><span class="p">):</span>
-        <span class="n">valid_X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span>
-        <span class="n">train_X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">valid_y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">train_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
-        <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_X</span><span class="p">,</span><span class="n">train_y</span><span class="p">)</span>
-        <span class="n">score1</span> <span class="o">=</span> <span class="n">performance_metric</span><span class="p">(</span><span class="n">valid_y</span><span class="p">,</span><span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">valid_X</span><span class="p">))</span>
-        <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score1</span><span class="p">)</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># 将数据分为3份，分别取其中一份作为验证集，另外两份作为训练集做训练和预测</span>
+    <span class="n">X_split</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">y_split</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">X_valid1</span> <span class="o">=</span> <span class="n">X_split</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y_valid1</span> <span class="o">=</span> <span class="n">y_split</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">X_train1</span> <span class="o">=</span> <span class="n">X_split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X_split</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">y_train1</span> <span class="o">=</span> <span class="n">y_split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_split</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train1</span><span class="p">,</span><span class="n">y_train1</span><span class="p">)</span>
+    <span class="n">score1</span> <span class="o">=</span> <span class="n">scoring</span><span class="p">(</span><span class="n">y_valid1</span><span class="p">,</span><span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid1</span><span class="p">))</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score1</span><span class="p">)</span>
+    
+    <span class="n">X_valid2</span> <span class="o">=</span> <span class="n">X_split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">y_valid2</span> <span class="o">=</span> <span class="n">y_split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">X_train2</span> <span class="o">=</span> <span class="n">X_split</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X_split</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">y_train2</span> <span class="o">=</span> <span class="n">y_split</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_split</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train2</span><span class="p">,</span><span class="n">y_train2</span><span class="p">)</span>
+    <span class="n">score2</span> <span class="o">=</span> <span class="n">scoring</span><span class="p">(</span><span class="n">y_valid2</span><span class="p">,</span><span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid2</span><span class="p">))</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score2</span><span class="p">)</span>
+    
+    <span class="n">X_valid3</span> <span class="o">=</span> <span class="n">X_split</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">y_valid3</span> <span class="o">=</span> <span class="n">y_split</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">X_train3</span> <span class="o">=</span> <span class="n">X_split</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X_split</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">y_train3</span> <span class="o">=</span> <span class="n">y_split</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_split</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train3</span><span class="p">,</span><span class="n">y_train3</span><span class="p">)</span>
+    <span class="n">score3</span> <span class="o">=</span> <span class="n">scoring</span><span class="p">(</span><span class="n">y_valid3</span><span class="p">,</span><span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid3</span><span class="p">))</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score3</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">scores</span>
 
 <span class="k">def</span> <span class="nf">fit_model2</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -14036,14 +14062,37 @@ xgSV/wdFWS5JyBFTewAAAABJRU5ErkJggg==
     <span class="n">best_score</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">depth</span> <span class="ow">in</span> <span class="n">max_depth</span><span class="p">:</span>
         <span class="n">estimator</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span>
-        <span class="n">score</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">score</span><span class="o">&gt;</span><span class="n">best_score</span><span class="p">:</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best_score</span><span class="p">:</span>
             <span class="n">best_score</span> <span class="o">=</span> <span class="n">score</span>
             <span class="n">best_estimator</span> <span class="o">=</span> <span class="n">estimator</span>
     <span class="k">return</span> <span class="n">best_estimator</span>
+
+<span class="c1"># 测试代码</span>
+<span class="n">test_optimal_reg</span> <span class="o">=</span> <span class="n">fit_model2</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="k">print</span> <span class="s2">&quot;Parameter &#39;max_depth&#39; is {} for the optimal model.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">test_optimal_reg</span><span class="o">.</span><span class="n">get_params</span><span class="p">()[</span><span class="s1">&#39;max_depth&#39;</span><span class="p">])</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Parameter &#39;max_depth&#39; is 4 for the optimal model.
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -14193,12 +14242,45 @@ Predicted selling price for Client 3&#39;s home: $931,636.36
 </div>
 
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[72]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="p">(</span><span class="mf">403025.00</span><span class="o">+</span><span class="mf">237478.72</span><span class="o">+</span><span class="mf">931636.36</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[72]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>524046.69333333336</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="&#38382;&#39064;-10---&#22238;&#31572;&#65306;">&#38382;&#39064; 10 - &#22238;&#31572;&#65306;<a class="anchor-link" href="#&#38382;&#39064;-10---&#22238;&#31572;&#65306;">&#194;&#182;</a></h3><p>建议客户1房屋价格为$403,025.00，客户2房屋价格为$237,478.72，客户3房屋价格为$931,636.36。<br>
-从房屋特征数值判断这样的价格是合理的。<br>
+<h3 id="&#38382;&#39064;-10---&#22238;&#31572;&#65306;">&#38382;&#39064; 10 - &#22238;&#31572;&#65306;<a class="anchor-link" href="#&#38382;&#39064;-10---&#22238;&#31572;&#65306;">&#194;&#182;</a></h3><p>建议客户1房屋价格为\$403,025.00，客户2房屋价格为\$237,478.72，客户3房屋价格为\$931,636.36。<br></p>
+<p>首先根据分析部分的数据，以上三个价格在最大值\$1,024,800.00和最小值\$105,000.00之间，平均值也接近整体的平均值，从房屋特征数值判断这样的价格是合理的。<br>
 根据我之间直观感受，房屋价格跟房间数量成正比，跟贫困程度以及学生-老师比例成均成反比。这个直觉被验证是正确的。<br>
 对于客户1的房屋，房间数量适中，贫困度适中，学生-老师比适中，房屋价格也居中。<br>
 对于客户2的房屋，房间数量少，贫困程度较大，学生-老师比较多，房屋价格也较低。<br>
